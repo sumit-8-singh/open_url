@@ -1,4 +1,4 @@
-name: Open URL in Chrome (Loop)
+name: Open URL in Chrome
 
 on:
   workflow_dispatch:  # Allows manual start
@@ -19,12 +19,13 @@ jobs:
         run: |
           pip install selenium webdriver-manager
 
-      - name: Create Python Script
+      - name: Run Selenium Script
         run: |
-          echo 'from selenium import webdriver
+          echo "Opening URL in Chrome..."
+          python - <<EOF
+          from selenium import webdriver
           from selenium.webdriver.chrome.service import Service
           from webdriver_manager.chrome import ChromeDriverManager
-          import time
 
           options = webdriver.ChromeOptions()
           options.add_argument("--headless")  # Run without UI
@@ -33,13 +34,7 @@ jobs:
 
           service = Service(ChromeDriverManager().install())
           driver = webdriver.Chrome(service=service, options=options)
-
-          while True:
-              driver.get("https://cdn.qw03.xyz/h/910001002.html?code=31WC3Q&uid=130159769")
-              print("Page opened successfully!")
-              driver.quit()
-              time.sleep(60)  # Wait 1 minute before the next request' > open_url.py
-
-      - name: Run Selenium Script in a Loop
-        run: |
-          python3 open_url.py
+          driver.get("https://cdn.qw03.xyz/h/910001002.html?code=31WC3Q&uid=130159769")
+          print("Page opened successfully!")
+          driver.quit()
+          EOF
